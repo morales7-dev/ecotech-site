@@ -1,32 +1,79 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
-<h2>cadastro do cliente</h2>
-<form action="#" method="post">
-<p><label for="nome">Nome:</label><br>
-    <input type ="text" id="nome" name="nome"></p>
-<p><label for="email">Email:</label><br>
-    <input type="email" id="email" name="email"></p>
-<p><label for="telefone">Telefone:</label><br>
-    <input type="tel" id="telefone" name="telefone" placeholder="(81) 99999-9999"></p>
-    <p><label for="nascimento">Nascimento:</label><br>
-        <input type="date" for="nascimento"="nascimento" name="nascimento"></p>
-      <input type="date" id="nascimento" name="nascimento">
-
+<head>
+  <meta charset="UTF-8">
+  <title>Cadastro - EcoTech Solutions</title>
+</head>
+<body>
+  <header>
+    <h1>EcoTech Solutions</h1>
     <nav>
       <a href="index.html">Início</a> |
       <a href="sobre.html">Sobre</a> |
       <a href="cadastro.html">Cadastro</a>
     </nav>
-</form>
+  </header>
+
+  <main>
+    <section>
+      <h2>Cadastro de produto</h2>
+      <p>Preencha o formulário para cadastrar um produto da cantina.</p>
+      <p>Os campos com o sinal " * " são obrigatórios </p>
+    </section>
 
     <section>
-      <h2>Por que se cadastrar?</h2>
-      <p>Você recebe novidades sobre nossos sistemas e dicas de sustentabilidade.</p>
+      <h2>Formulário</h2>
+      <form>
+        <!-- Campo 1: nome (obrigatório, mínimo 3 letras) -->
+        <p>
+          <label for="nome">Nome do produto *</label><br>
+          <input type="text" id="nome" required minlength="3">
+        </p>
+
+        <!-- Campo 2: categoria (select) -->
+        <p>
+          <label for="categoria">Categoria</label><br>
+          <select id="categoria">
+            <option>Bebida</option>
+            <option>Salgado</option>
+            <option>Doce</option>
+          </select>
+        </p>
+
+        <!-- Campo 3: quantidade (obrigatório, de 0 a 1000) -->
+        <p>
+          <label for="quantidade">Quantidade *</label><br>
+          <input type="number" id="quantidade" required min="0" max="1000">
+        </p>
+
+        <!-- Campo 4: unidade (radio) -->
+        <p>
+          Unidade:<br>
+          <input type="radio" name="unidade" id="un" checked>
+          <label for="un">Unidade</label>
+          <input type="radio" name="unidade" id="kg">
+          <label for="kg">Quilo</label>
+        </p>
+
+        <!-- Campo 5: checkbox -->
+        <p>
+          <input type="checkbox" id="pereciveis">
+          <label for="pereciveis">Produto perecível</label>
+        </p>
+
+        <!-- Campo 6: textarea -->
+        <p>
+          <label for="obs">Observações</label><br>
+          <textarea id="obs" rows="3" cols="30"></textarea>
+        </p>
+
+        <button type="submit">Cadastrar</button>
+      </form>
     </section>
   </main>
 
   <footer>
-    <p>EcoTech Solutions - Projeto SENAI</p>
+    <p>EcoTech Solutions -- Projeto SENAI</p>
   </footer>
 </body>
 </html>
