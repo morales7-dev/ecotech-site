@@ -1,0 +1,79 @@
+
+:root {
+  --verde-floresta: #2D6A4F;  
+  --verde-menta: #52B788;     
+  --branco-neve: #F8F9FA;     
+  --cinza-chumbo: #212529;    
+  --verde-suave: #D8F3DC;     
+}
+
+/* 2. Estilos Gerais */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  background-color: var(--branco-neve);
+  color: var(--cinza-chumbo);
+  font-family: Arial, sans-serif;
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+
+header {
+  background-color: var(--verde-floresta);
+  color: #ffffff;
+  padding: 20px;
+}
+
+header h1 {
+  margin-bottom: 10px;
+}
+
+nav a {
+  color: #ffffff;
+  text-decoration: none;
+  font-weight: bold;
+  margin-right: 10px;
+}
+
+nav a:hover {
+  color: var(--verde-suave);
+}
+
+
+main {
+  padding: 20px;
+  flex: 1;
+}
+
+section {
+  background-color: var(--verde-suave);
+  padding: 20px;
+  margin-bottom: 20px;
+  border-radius: 8px;
+  border: 1px solid var(--verde-menta);
+}
+
+section h2 {
+  color: var(--verde-floresta);
+  margin-bottom: 12px;
+}
+
+ul {
+  margin-left: 20px;
+  margin-top: 10px;
+}
+
+
+footer {
+  background-color: var(--verde-floresta);
+  color: #ffffff;
+  text-align: center;
+  padding: 15px;
+  margin-top: auto;
+}
