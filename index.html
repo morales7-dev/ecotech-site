@@ -68,6 +68,27 @@
   
   // Chama a função para rodar
   criarCartoes();
+
+  let subtotal = 0;
+
+  function adicionar(id, preco) {
+    subtotal += preco; // Soma o preço do produto clicado
+    
+    // Calcula o desconto se passar de 50 reais (ex: 10% de desconto)
+    let total = subtotal;
+    if (subtotal > 50) {
+      total = subtotal * 0.90; 
+    }
+
+    // Mostra na tela (Passo 3)
+    document.getElementById('pedido').innerHTML = `
+      <p>Subtotal: R$ ${subtotal.toFixed(2)}</p>
+      <p><strong>Total a pagar: R$ ${total.toFixed(2)}</strong></p>
+    `;
+
+    // Mostra no console para a conferência do professor (Passo 4)
+    console.log("Subtotal:", subtotal, "| Total com desconto:", total);
+  }
 </script>
   <footer>
     <p>EcoTech Solutions - Projeto SENAI</p>
