@@ -2,10 +2,17 @@
 <html lang="pt-BR">
 <head>
   <meta charset="UTF-8">
+<<<<<<< HEAD
   <title>EcoTech Solutions</title>
 
   <link rel="stylesheet" href="css/style.css">
+=======
+    <title>EcoTech Solutions</title>
+
+    <link rel="stylesheet" href="css/style.css">
+>>>>>>> eacdf96f8ce0bec5670076afcdeeea1bca7f11c2
 </head>
+
 <body>
   <header>
     <h1>EcoTech Solutions</h1>
@@ -45,6 +52,42 @@
     </section>
   </main>
 
+    <section>
+  <h2>Catálogo</h2>
+  <div id="catalogo" style="display: flex; gap: 10px;"></div>
+  
+  <h2>Pedido</h2>
+  <div id="pedido"></div>
+</section>
+  </main>
+<script>
+  const produtos = [
+    { id: 1, nome: "Muda de Árvore", preco: 15.00, img: "https://via.placeholder.com/100" },
+    { id: 2, nome: "Ecobag", preco: 25.00, img: "https://via.placeholder.com/100" },
+    { id: 3, nome: "Canudo Inox", preco: 20.00, img: "https://via.placeholder.com/100" },
+    { id: 4, nome: "Composteira", preco: 120.00, img: "https://via.placeholder.com/100" },
+    { id: 5, nome: "Escova Bambu", preco: 22.00, img: "https://via.placeholder.com/100" }
+  ];
+
+  function criarCartoes() {
+    const divCatalogo = document.getElementById('catalogo'); // Pega a caixa vazia
+    
+    // Para cada produto no array, cria um HTML
+    produtos.forEach(produto => {
+      divCatalogo.innerHTML += `
+        <div style="border: 1px solid #000; padding: 10px;">
+          <img src="${produto.img}">
+          <h3>${produto.nome}</h3>
+          <p>R$ ${produto.preco}</p>
+          <button onclick="adicionar(${produto.id}, ${produto.preco})">Adicionar</button>
+        </div>
+      `;
+    });
+  }
+  
+  // Chama a função para rodar
+  criarCartoes();
+</script>
   <footer>
     <p>EcoTech Solutions - Projeto SENAI</p>
   </footer>
