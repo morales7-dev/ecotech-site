@@ -49,6 +49,25 @@
     { id: 4, nome: "Composteira", preco: 120.00, img: "https://via.placeholder.com/100" },
     { id: 5, nome: "Escova Bambu", preco: 22.00, img: "https://via.placeholder.com/100" }
   ];
+
+  function criarCartoes() {
+    const divCatalogo = document.getElementById('catalogo'); // Pega a caixa vazia
+    
+    // Para cada produto no array, cria um HTML
+    produtos.forEach(produto => {
+      divCatalogo.innerHTML += `
+        <div style="border: 1px solid #000; padding: 10px;">
+          <img src="${produto.img}">
+          <h3>${produto.nome}</h3>
+          <p>R$ ${produto.preco}</p>
+          <button onclick="adicionar(${produto.id}, ${produto.preco})">Adicionar</button>
+        </div>
+      `;
+    });
+  }
+  
+  // Chama a função para rodar
+  criarCartoes();
 </script>
   <footer>
     <p>EcoTech Solutions - Projeto SENAI</p>
