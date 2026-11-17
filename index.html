@@ -2,14 +2,11 @@
 <html lang="pt-BR">
 <head>
   <meta charset="UTF-8">
-  <title>EcoTech Solutions</title>
-<<<<<<< HEAD
-<link rel="stylesheet" href="style.css">
-=======
+    <title>EcoTech Solutions</title>
 
-  <link rel="stylesheet" href="css/style.css">
->>>>>>> 2ec4c10e44043b6a9b5b7b37f6c48ca93f39c728
+    <link rel="stylesheet" href="css/style.css">
 </head>
+
 <body>
   <header>
     <h1>EcoTech Solutions</h1>
@@ -35,8 +32,24 @@
         <li>Relatórios de reciclagem</li>
       </ul>
     </section>
-  </main>
 
+    <section>
+  <h2>Catálogo</h2>
+  <div id="catalogo" style="display: flex; gap: 10px;"></div>
+  
+  <h2>Pedido</h2>
+  <div id="pedido"></div>
+</section>
+  </main>
+<script>
+  const produtos = [
+    { id: 1, nome: "Muda de Árvore", preco: 15.00, img: "https://via.placeholder.com/100" },
+    { id: 2, nome: "Ecobag", preco: 25.00, img: "https://via.placeholder.com/100" },
+    { id: 3, nome: "Canudo Inox", preco: 20.00, img: "https://via.placeholder.com/100" },
+    { id: 4, nome: "Composteira", preco: 120.00, img: "https://via.placeholder.com/100" },
+    { id: 5, nome: "Escova Bambu", preco: 22.00, img: "https://via.placeholder.com/100" }
+  ];
+</script>
   <footer>
     <p>EcoTech Solutions - Projeto SENAI</p>
   </footer>
