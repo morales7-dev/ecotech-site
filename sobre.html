@@ -3,7 +3,6 @@
 <head>
   <meta charset="UTF-8">
   <title>Sobre - EcoTech Solutions</title>
-
   <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
@@ -22,30 +21,55 @@
       <p>Criar softwares simples que ajudem a reduzir, separar e reaproveitar resíduos.</p>
     </section>
 
+    <!-- NOVA FUNCIONALIDADE COM JAVASCRIPT -->
+    <section style="background: #f4f4f4; padding: 15px; border-radius: 8px; margin-bottom: 20px;">
+      <h2>Simulador de Descarte</h2>
+      <p>Não sabe onde jogar o lixo? Selecione o material abaixo:</p>
+
+      <select id="select-material" onchange="verificarLixeira()" style="padding: 5px;">
+        <option value="">-- Escolha um resíduo --</option>
+        <option value="papel">Jornal, papelão ou folha de caderno</option>
+        <option value="plastico">Garrafa PET, sacola ou pote de iogurte</option>
+        <option value="vidro">Garrafa de suco, pote de conserva ou copo</option>
+        <option value="metal">Latinha de refrigerante, prego ou tampa</option>
+        <option value="organico">Restos de comida ou casca de fruta</option>
+      </select>
+
+      <!-- O JavaScript vai escrever a resposta aqui dentro -->
+      <p id="resultado-lixeira" style="font-size: 18px; font-weight: bold; margin-top: 15px;"></p>
+    </section>
+
     <section>
       <h2>Cores da coleta seletiva</h2>
-      <table border="1">
+      
+      <!-- Botão extra para treinar mostrar/esconder elemento -->
+      <button onclick="alternarTabela()" style="margin-bottom: 10px; cursor: pointer;">
+        Mostrar / Esconder Tabela
+      </button>
+
+      <table id="tabela-coleta" border="1" cellpadding="8">
         <tr>
           <th>Resíduo</th>
           <th>Cor da lixeira</th>
         </tr>
         <tr>
           <td>Papel</td>
-          <td>Azul</td>
+          <td style="color: blue; font-weight: bold;">Azul</td>
         </tr>
         <tr>
           <td>Plástico</td>
-          <td>Vermelha</td>
+          <td style="color: red; font-weight: bold;">Vermelha</td>
         </tr>
         <tr>
           <td>Vidro</td>
-          <td>Verde</td>
+          <td style="color: green; font-weight: bold;">Verde</td>
         </tr>
         <tr>
           <td>Metal</td>
-          <td>Amarela</td>
+          <td style="color: #d4a017; font-weight: bold;">Amarela</td>
         </tr>
       </table>
+
       <p>Saiba mais no site do <a href="https://www.gov.br/mma/pt-br" target="_blank">Ministério do Meio Ambiente</a>.</p>
     </section>
   </main>
@@ -53,5 +77,52 @@
   <footer>
     <p>EcoTech Solutions - Projeto SENAI</p>
   </footer>
+
+  <script>
+    // 1. Função que verifica qual material foi escolhido no <select>
+    function verificarLixeira() {
+      // Pega o valor selecionado pelo usuário
+      let material = document.getElementById('select-material').value;
+      // Pega o parágrafo onde vamos mostrar a resposta
+      let textoResultado = document.getElementById('resultado-lixeira');
+
+      // Estrutura condicional (if / else if) básica
+      if (material === "papel") {
+        textoResultado.innerText = "Jogue na lixeira AZUL (Papel).";
+        textoResultado.style.color = "blue";
+      } 
+      else if (material === "plastico") {
+        textoResultado.innerText = "Jogue na lixeira VERMELHA (Plástico).";
+        textoResultado.style.color = "red";
+      } 
+      else if (material === "vidro") {
+        textoResultado.innerText = "Jogue na lixeira VERDE (Vidro).";
+        textoResultado.style.color = "green";
+      } 
+      else if (material === "metal") {
+        textoResultado.innerText = "Jogue na lixeira AMARELA (Metal).";
+        textoResultado.style.color = "#d4a017"; // Amarelo escuro para dar leitura
+      } 
+      else if (material === "organico") {
+        textoResultado.innerText = "Jogue na lixeira MARROM (Orgânico).";
+        textoResultado.style.color = "brown";
+      } 
+      else {
+        // Se voltar para a opção "-- Escolha um resíduo --", limpa o texto
+        textoResultado.innerText = "";
+      }
+    }
+
+    // 2. Função extra para esconder ou mostrar a tabela ao clicar no botão
+    function alternarTabela() {
+      let tabela = document.getElementById('tabela-coleta');
+
+      if (tabela.style.display === "none") {
+        tabela.style.display = "table"; // Mostra a tabela
+      } else {
+        tabela.style.display = "none";  // Esconde a tabela
+      }
+    }
+  </script>
 </body>
 </html>
