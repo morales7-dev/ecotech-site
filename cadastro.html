@@ -3,7 +3,6 @@
 <head>
   <meta charset="UTF-8">
   <title>Cadastro - EcoTech Solutions</title>
-
   <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
@@ -20,12 +19,13 @@
     <section>
       <h2>Cadastro de produto</h2>
       <p>Preencha o formulário para cadastrar um produto da cantina.</p>
-      <p>Os campos com o sinal " * " são obrigatórios </p>
+      <p>Os campos com o sinal " * " são obrigatórios</p>
     </section>
 
     <section>
       <h2>Formulário</h2>
-      <form>
+      <!-- Adicionado id="form-cadastro" para o JavaScript controlar o envio -->
+      <form id="form-cadastro">
         <!-- Campo 1: nome (obrigatório, mínimo 3 letras) -->
         <p>
           <label for="nome">Nome do produto *</label><br>
@@ -36,9 +36,9 @@
         <p>
           <label for="categoria">Categoria</label><br>
           <select id="categoria">
-            <option>Bebida</option>
-            <option>Salgado</option>
-            <option>Doce</option>
+            <option value="Bebida">Bebida</option>
+            <option value="Salgado">Salgado</option>
+            <option value="Doce">Doce</option>
           </select>
         </p>
 
@@ -51,9 +51,9 @@
         <!-- Campo 4: unidade (radio) -->
         <p>
           Unidade:<br>
-          <input type="radio" name="unidade" id="un" checked>
+          <input type="radio" name="unidade" id="un" value="Unidade(s)" checked>
           <label for="un">Unidade</label>
-          <input type="radio" name="unidade" id="kg">
+          <input type="radio" name="unidade" id="kg" value="Quilo(s)">
           <label for="kg">Quilo</label>
         </p>
 
@@ -71,11 +71,72 @@
 
         <button type="submit">Cadastrar</button>
       </form>
+
+      <!-- Mensagem de confirmação que aparece após cadastrar -->
+      <p id="mensagem-sucesso" style="color: green; font-weight: bold; display: none; margin-top: 15px;">
+        Produto cadastrado com sucesso!
+      </p>
+    </section>
+
+    <!-- Nova seção onde os produtos cadastrados vão aparecer na tela -->
+    <section style="margin-top: 30px;">
+      <h2>Produtos Cadastrados</h2>
+      <ul id="lista-produtos"></ul>
     </section>
   </main>
 
   <footer>
     <p>EcoTech Solutions -- Projeto SENAI</p>
   </footer>
+
+  <script>
+    // 1. Pega o formulário pelo ID
+    const formulario = document.getElementById('form-cadastro');
+
+    // 2. Escuta o evento de envio (submit) do formulário
+    formulario.addEventListener('submit', function(evento) {
+      // Impede a página de recarregar e perder os dados
+      evento.preventDefault();
+
+      // 3. Captura os valores digitados nos campos
+      let nome = document.getElementById('nome').value;
+      let categoria = document.getElementById('categoria').value;
+      let quantidade = document.getElementById('quantidade').value;
+      let obs = document.getElementById('obs').value;
+
+      // Verifica qual botão radio está marcado (Unidade ou Quilo)
+      let unidade = "Unidade(s)";
+      if (document.getElementById('kg').checked) {
+        unidade = "Quilo(s)";
+      }
+
+      // Verifica se o checkbox de perecível foi marcado
+      let textoPerecivel = "Não perecível";
+      if (document.getElementById('pereciveis').checked) {
+        textoPerecivel = "Perecível";
+      }
+
+      // 4. Adiciona o item na lista <ul> lá embaixo
+      let lista = document.getElementById('lista-produtos');
+      lista.innerHTML += `
+        <li style="margin-bottom: 10px; border-bottom: 1px solid #ccc; padding-bottom: 5px;">
+          <strong>${nome}</strong> (${categoria}) - 
+          Quantidade: ${quantidade} ${unidade} | 
+          <em>${textoPerecivel}</em>
+          ${obs ? "<br>Obs: " + obs : ""}
+        </li>
+      `;
+
+      // 5. Mostra a mensagem verde de sucesso
+      let msg = document.getElementById('mensagem-sucesso');
+      msg.style.display = 'block';
+
+      // 6. Limpa os campos do formulário para o próximo cadastro
+      formulario.reset();
+
+      // Mostra no console para conferência
+      console.log("Cadastrado:", { nome, categoria, quantidade, unidade, textoPerecivel, obs });
+    });
+  </script>
 </body>
 </html>
