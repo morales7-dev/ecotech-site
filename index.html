@@ -2,15 +2,8 @@
 <html lang="pt-BR">
 <head>
   <meta charset="UTF-8">
-<<<<<<< HEAD
   <title>EcoTech Solutions</title>
-
   <link rel="stylesheet" href="css/style.css">
-=======
-    <title>EcoTech Solutions</title>
-
-    <link rel="stylesheet" href="css/style.css">
->>>>>>> eacdf96f8ce0bec5670076afcdeeea1bca7f11c2
 </head>
 
 <body>
@@ -38,80 +31,106 @@
         <li>Relatórios de reciclagem</li>
       </ul>
     </section>
+
     <section>
       <h2>Catálogo de Produtos</h2>
-      <div class="resumo-pedido">
+      
+      <!-- Caixa de resumo do pedido -->
+      <div class="resumo-pedido" style="background: #f4f4f4; padding: 15px; margin-bottom: 20px; border-radius: 5px;">
         <p>Itens no pedido: <strong id="qtd-itens">0</strong></p>
-        <p>Total: <strong id="total-pedido">R$ 0,00</strong></p>
+        <p>Subtotal: <strong id="subtotal-pedido">R$ 0,00</strong></p>
+        <p>Total a pagar: <strong id="total-pedido">R$ 0,00</strong></p>
+        
         <p id="info-desconto" style="display: none; color: #2e7d32; font-weight: bold;">
           Desconto de 10% aplicado (3 ou mais itens)!
         </p>
+
+        <button onclick="limparPedido()" style="margin-top: 10px; cursor: pointer;">Limpar Pedido</button>
       </div>
 
-      <div id="catalogo"></div>
+      <!-- Onde os cards dos produtos vão aparecer -->
+      <div id="catalogo" style="display: flex; gap: 15px; flex-wrap: wrap;"></div>
     </section>
   </main>
 
-    <section>
-  <h2>Catálogo</h2>
-  <div id="catalogo" style="display: flex; gap: 10px;"></div>
-  
-  <h2>Pedido</h2>
-  <div id="pedido"></div>
-</section>
-  </main>
-<script>
-  const produtos = [
-    { id: 1, nome: "Muda de Árvore", preco: 15.00, img: "https://via.placeholder.com/100" },
-    { id: 2, nome: "Ecobag", preco: 25.00, img: "https://via.placeholder.com/100" },
-    { id: 3, nome: "Canudo Inox", preco: 20.00, img: "https://via.placeholder.com/100" },
-    { id: 4, nome: "Composteira", preco: 120.00, img: "https://via.placeholder.com/100" },
-    { id: 5, nome: "Escova Bambu", preco: 22.00, img: "https://via.placeholder.com/100" }
-  ];
-
-  function criarCartoes() {
-    const divCatalogo = document.getElementById('catalogo'); // Pega a caixa vazia
-    
-    // Para cada produto no array, cria um HTML
-    produtos.forEach(produto => {
-      divCatalogo.innerHTML += `
-        <div style="border: 1px solid #000; padding: 10px;">
-          <img src="${produto.img}">
-          <h3>${produto.nome}</h3>
-          <p>R$ ${produto.preco}</p>
-          <button onclick="adicionar(${produto.id}, ${produto.preco})">Adicionar</button>
-        </div>
-      `;
-    });
-  }
-  
-  // Chama a função para rodar
-  criarCartoes();
-
-  let subtotal = 0;
-
-  function adicionar(id, preco) {
-    subtotal += preco; // Soma o preço do produto clicado
-    
-    // Calcula o desconto se passar de 50 reais (ex: 10% de desconto)
-    let total = subtotal;
-    if (subtotal > 50) {
-      total = subtotal * 0.90; 
-    }
-
-    // Mostra na tela (Passo 3)
-    document.getElementById('pedido').innerHTML = `
-      <p>Subtotal: R$ ${subtotal.toFixed(2)}</p>
-      <p><strong>Total a pagar: R$ ${total.toFixed(2)}</strong></p>
-    `;
-
-    // Mostra no console para a conferência do professor (Passo 4)
-    console.log("Subtotal:", subtotal, "| Total com desconto:", total);
-  }
-</script>
   <footer>
     <p>EcoTech Solutions - Projeto SENAI</p>
   </footer>
-  <script src="Js/script.js"></script>
+
+  <script>
+    // 1. Lista de produtos (Array de Objetos)
+    const produtos = [
+      { id: 1, nome: "Muda de Árvore", preco: 15.00, img: "https://via.placeholder.com/100" },
+      { id: 2, nome: "Ecobag", preco: 25.00, img: "https://via.placeholder.com/100" },
+      { id: 3, nome: "Canudo Inox", preco: 20.00, img: "https://via.placeholder.com/100" },
+      { id: 4, nome: "Composteira", preco: 120.00, img: "https://via.placeholder.com/100" },
+      { id: 5, nome: "Escova Bambu", preco: 22.00, img: "https://via.placeholder.com/100" }
+    ];
+
+    // Variáveis para guardar o estado do carrinho
+    let quantidadeItens = 0;
+    let subtotal = 0;
+
+    // 2. Função para desenhar os produtos na tela
+    function criarCartoes() {
+      const divCatalogo = document.getElementById('catalogo');
+      divCatalogo.innerHTML = ""; // Garante que começa vazio
+
+      for (let i = 0; i < produtos.length; i++) {
+        let produto = produtos[i];
+
+        divCatalogo.innerHTML += `
+          <div style="border: 1px solid #ccc; padding: 15px; border-radius: 8px; text-align: center; width: 150px;">
+            <img src="${produto.img}" alt="${produto.nome}">
+            <h3>${produto.nome}</h3>
+            <p>R$ ${produto.preco.toFixed(2).replace('.', ',')}</p>
+            <button onclick="adicionar(${produto.preco})" style="cursor: pointer; padding: 5px 10px;">
+              Adicionar
+            </button>
+          </div>
+        `;
+      }
+    }
+
+    // 3. Função chamada ao clicar em "Adicionar"
+    function adicionar(preco) {
+      quantidadeItens = quantidadeItens + 1;
+      subtotal = subtotal + preco;
+
+      atualizarTela();
+    }
+
+    // 4. Função para calcular desconto e atualizar os textos do HTML
+    function atualizarTela() {
+      let total = subtotal;
+      const textoDesconto = document.getElementById('info-desconto');
+
+      // Regra: 10% de desconto se tiver 3 ou mais itens
+      if (quantidadeItens >= 3) {
+        total = subtotal * 0.90;
+        textoDesconto.style.display = 'block'; // Mostra a mensagem verde
+      } else {
+        textoDesconto.style.display = 'none'; // Esconde a mensagem verde
+      }
+
+      // Atualiza os valores na tela formatados em Reais
+      document.getElementById('qtd-itens').innerText = quantidadeItens;
+      document.getElementById('subtotal-pedido').innerText = "R$ " + subtotal.toFixed(2).replace('.', ',');
+      document.getElementById('total-pedido').innerText = "R$ " + total.toFixed(2).replace('.', ',');
+
+      // Log no console para conferência
+      console.log("Itens:", quantidadeItens, "| Subtotal:", subtotal, "| Total:", total);
+    }
+
+    // 5. Função extra para zerar o carrinho
+    function limparPedido() {
+      quantidadeItens = 0;
+      subtotal = 0;
+      atualizarTela();
+    }
+
+    // Inicia o catálogo assim que a página carrega
+    criarCartoes();
+  </script>
 </body>
 </html>
