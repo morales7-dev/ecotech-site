@@ -4,6 +4,11 @@
   <meta charset="UTF-8">
   <title>Cadastro - EcoTech Solutions</title>
   <link rel="stylesheet" href="css/style.css">
+  <style>
+    input[readonly] { background-color: #f0f0f0; }
+    .erro-cep { color: #c0392b; font-weight: bold; }
+    .ok-cep { color: #1e8449; font-weight: bold; }
+  </style>
 </head>
 <body>
   <header>
@@ -24,7 +29,6 @@
 
     <section>
       <h2>Formulário</h2>
-      <!-- Adicionado id="form-cadastro" para o JavaScript controlar o envio -->
       <form id="form-cadastro">
         <!-- Campo 1: nome (obrigatório, mínimo 3 letras) -->
         <p>
@@ -69,6 +73,39 @@
           <textarea id="obs" rows="3" cols="30"></textarea>
         </p>
 
+        <!-- Atividade 1: Consulta de CEP (fornecedor / origem) -->
+        <fieldset style="margin-bottom: 15px; padding: 12px;">
+          <legend>Endereço de origem / fornecedor (Consulta de CEP)</legend>
+
+          <p>
+            <label for="cep">CEP (8 dígitos, apenas números)</label><br>
+            <input type="text" id="cep" maxlength="9" placeholder="Ex: 50030230">
+            <button type="button" id="btn-buscar-cep" onclick="buscarCep()">Buscar</button>
+          </p>
+
+          <p id="msg-cep"></p>
+
+          <p>
+            <label for="logradouro">Logradouro</label><br>
+            <input type="text" id="logradouro" readonly>
+          </p>
+
+          <p>
+            <label for="bairro">Bairro</label><br>
+            <input type="text" id="bairro" readonly>
+          </p>
+
+          <p>
+            <label for="cidade">Cidade</label><br>
+            <input type="text" id="cidade" readonly>
+          </p>
+
+          <p>
+            <label for="uf">UF</label><br>
+            <input type="text" id="uf" readonly maxlength="2">
+          </p>
+        </fieldset>
+
         <button type="submit">Cadastrar</button>
       </form>
 
@@ -90,12 +127,69 @@
   </footer>
 
   <script>
+    function limparEndereco() {
+      document.getElementById('logradouro').value = '';
+      document.getElementById('bairro').value = '';
+      document.getElementById('cidade').value = '';
+      document.getElementById('uf').value = '';
+    }
+
+    function mostrarMensagemCep(texto, tipo) {
+      const msgCep = document.getElementById('msg-cep');
+      msgCep.textContent = texto;
+      msgCep.className = tipo === 'erro' ? 'erro-cep' : 'ok-cep';
+    }
+
+    async function buscarCep() {
+      const cepRaw = document.getElementById('cep').value;
+      const cepLimpo = cepRaw.replace(/\D/g, '');
+
+      limparEndereco();
+      mostrarMensagemCep('', '');
+
+      // 1. Tratamento: CEP incompleto
+      if (cepLimpo.length !== 8) {
+        mostrarMensagemCep('CEP incompleto: informe exatamente 8 números.', 'erro');
+        return;
+      }
+
+      mostrarMensagemCep('Consultando CEP...', 'ok');
+
+      try {
+        // 2. Requisição à API ViaCEP
+        const resposta = await fetch(`https://viacep.com.br/ws/${cepLimpo}/json/`);
+
+        if (!resposta.ok) {
+          mostrarMensagemCep('Erro ao consultar o CEP: resposta inválida do serviço.', 'erro');
+          return;
+        }
+
+        const dados = await resposta.json();
+
+        // 3. Tratamento: CEP inexistente
+        if (dados.erro) {
+          mostrarMensagemCep('CEP inexistente: não foi encontrado nenhum endereço para este CEP.', 'erro');
+          return;
+        }
+
+        // Preenchimento dos campos somente leitura
+        document.getElementById('logradouro').value = dados.logradouro || '';
+        document.getElementById('bairro').value = dados.bairro || '';
+        document.getElementById('cidade').value = dados.localidade || '';
+        document.getElementById('uf').value = dados.uf || '';
+        mostrarMensagemCep('Endereço encontrado e preenchido.', 'ok');
+
+      } catch (erro) {
+        // 4. Tratamento: sem conexão / falha de rede
+        mostrarMensagemCep('Sem conexão ou falha na rede: não foi possível buscar o CEP.', 'erro');
+      }
+    }
+
     // 1. Pega o formulário pelo ID
     const formulario = document.getElementById('form-cadastro');
 
     // 2. Escuta o evento de envio (submit) do formulário
     formulario.addEventListener('submit', function(evento) {
-      // Impede a página de recarregar e perder os dados
       evento.preventDefault();
 
       // 3. Captura os valores digitados nos campos
@@ -103,17 +197,23 @@
       let categoria = document.getElementById('categoria').value;
       let quantidade = document.getElementById('quantidade').value;
       let obs = document.getElementById('obs').value;
+      let cep = document.getElementById('cep').value;
+      let cidade = document.getElementById('cidade').value;
+      let uf = document.getElementById('uf').value;
 
-      // Verifica qual botão radio está marcado (Unidade ou Quilo)
       let unidade = "Unidade(s)";
       if (document.getElementById('kg').checked) {
         unidade = "Quilo(s)";
       }
 
-      // Verifica se o checkbox de perecível foi marcado
       let textoPerecivel = "Não perecível";
       if (document.getElementById('pereciveis').checked) {
         textoPerecivel = "Perecível";
+      }
+
+      let infoEndereco = "";
+      if (cidade || uf || cep) {
+        infoEndereco = `<br>Origem: ${cidade || "N/A"}${uf ? "/" + uf : ""} ${cep ? "(CEP: " + cep + ")" : ""}`;
       }
 
       // 4. Adiciona o item na lista <ul> lá embaixo
@@ -123,6 +223,7 @@
           <strong>${nome}</strong> (${categoria}) - 
           Quantidade: ${quantidade} ${unidade} | 
           <em>${textoPerecivel}</em>
+          ${infoEndereco}
           ${obs ? "<br>Obs: " + obs : ""}
         </li>
       `;
@@ -131,11 +232,12 @@
       let msg = document.getElementById('mensagem-sucesso');
       msg.style.display = 'block';
 
-      // 6. Limpa os campos do formulário para o próximo cadastro
+      // 6. Limpa os campos do formulário e do endereço para o próximo cadastro
       formulario.reset();
+      limparEndereco();
+      mostrarMensagemCep('', '');
 
-      // Mostra no console para conferência
-      console.log("Cadastrado:", { nome, categoria, quantidade, unidade, textoPerecivel, obs });
+      console.log("Cadastrado:", { nome, categoria, quantidade, unidade, textoPerecivel, cep, cidade, uf, obs });
     });
   </script>
 </body>
