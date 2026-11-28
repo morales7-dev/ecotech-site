@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="pt-PT">
+<head>
+  <meta charset="UTF-8">
+  <title>Feriados Nacionais — EcoTech Solutions</title>
+  <link rel="stylesheet" href="css/style.css">
+  <style>
+    #estado-api {
+      font-weight: bold;
+      margin: 15px 0;
+    }
+    .erro-api {
+      color: #c0392b;
+    }
+    #lista-feriados {
+      list-style: none;
+      padding: 0;
+    }
+    #lista-feriados li {
+      margin-bottom: 8px;
+      padding: 8px 12px;
+      border-left: 4px solid #0047b6;
+      background-color: #f4f7fb;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>EcoTech Solutions</h1>
+    <nav>
+      <a href="index.html">Início</a> |
+      <a href="sobre.html">Sobre</a> |
+      <a href="cadastro.html">Cadastro</a> |
+      <a href="feriados.html">Feriados</a>
+    </nav>
+  </header>
+
+  <main>
+    <section>
+      <h2>Feriados Nacionais (2026)</h2>
+      <p>Lista carregada dinamicamente a partir da BrasilAPI.</p>
+      <p id="estado-api">A carregar feriados...</p>
+      <ul id="lista-feriados"></ul>
+    </section>
+  </main>
+
+  <footer>
+    <p>EcoTech Solutions -- Projeto SENAI</p>
+  </footer>
+
+  <script>
+    async function carregarFeriados() {
+      const estadoEl = document.getElementById('estado-api');
+      const listaEl = document.getElementById('lista-feriados');
+
+      estadoEl.textContent = 'A carregar feriados...';
+      estadoEl.className = '';
+      listaEl.innerHTML = '';
+
+      try {
+        const resposta = await fetch('https://brasilapi.com.br/api/feriados/v1/2026');
+
+        if (!resposta.ok) {
+          throw new Error('Falha ao obter resposta da API.');
+        }
+
+        const feriados = await resposta.json();
+
+        estadoEl.textContent = `Total de feriados encontrados: ${feriados.length}`;
+
+        feriados.forEach(function (feriado) {
+          const item = document.createElement('li');
+          const dataFormatada = feriado.date.split('-').reverse().join('/');
+          item.textContent = `${dataFormatada} — ${feriado.name} (${feriado.type})`;
+          listaEl.appendChild(item);
+        });
+      } catch (erro) {
+        estadoEl.textContent = 'Erro ao carregar a lista de feriados. Verifique a ligação ou tente novamente.';
+        estadoEl.className = 'erro-api';
+      }
+    }
+
+    carregarFeriados();
+  </script>
+</body>
+</html>
