@@ -25,4 +25,8 @@ ecotech-site/
 ├── index.html
 ├── sobre.html
 ├── cadastro.html
+<<<<<<< HEAD
 └── README.md
+=======
+└── README.md
+>>>>>>> 49a295203d0e3643532ba378bef8ffa075a56fb3
